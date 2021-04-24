@@ -1,0 +1,21 @@
+{{define "login_form"}}
+<div class="form small_form" id="login_form">
+    <form action="#" method="POST">
+    <div class="form_field">
+        <label for={{.LoginForm.UsernameField}}>{{.LoginForm.UsernameName}}</label>
+        <input type="email" name={{.LoginForm.UsernameField}} required/>
+    </div>
+    <div class="form_field">
+        <label for={{.LoginForm.PasswordField}}>{{.LoginForm.PasswordName}}</label>
+        <input type="password" name={{.LoginForm.PasswordField}} required/>
+    </div>
+    <div class="form_submit">
+    <!-- <button class="g-recaptcha" 
+        data-sitekey="reCAPTCHA_site_key" 
+        data-callback='onSubmit' 
+        data-action='submit'>{{.LoginForm.SubmitName}}</button> -->
+    <input type="submit" name={{.LoginForm.SubmitName}} />
+    </div>
+    </form>
+</div>
+{{end}}

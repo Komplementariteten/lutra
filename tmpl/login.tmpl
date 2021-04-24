@@ -1,0 +1,12 @@
+{{define "login"}}
+{{template "header" .}}
+{{template "bodystart" .}}
+<main>
+<header>
+<p class="desc">{{.Description}}</p>
+</header>
+<p class="headline">{{.Headline}}</p>
+{{template "login_form" .}}
+</main>
+{{template "bodyend" .}}
+{{end}}

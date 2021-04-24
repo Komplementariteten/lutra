@@ -1,0 +1,31 @@
+{{define "register_form"}}
+<div class="form small_form" id="register_form">
+    <form action="#" method="POST">
+    <div class="form_field">
+        <label for={{.RegisterForm.NameField}}>{{.RegisterForm.NameName}}</label>
+        <input type="text" name={{.RegisterForm.NameField}} required/>
+    </div>
+    <div class="form_field">
+        <label for={{.RegisterForm.UsernameField}}>{{.RegisterForm.UsernameName}}</label>
+        <input type="email" name={{.RegisterForm.UsernameField}} required/>
+    </div>
+    <div class="form_field">
+        <label for={{.RegisterForm.PasswordField}}>{{.RegisterForm.PasswordName}}</label>
+        <input type="password" name={{.RegisterForm.PasswordField}} required/>
+    </div>
+    <div class="form_field">
+        <p>{{.RegisterForm.PasswordValidationInfo}}</p>
+        <label for={{.RegisterForm.PasswordFieldValidation}}>{{.RegisterForm.PasswordValidationName}}</label>
+        <input type="password" name={{.RegisterForm.PasswordFieldValidation}} required/>
+    </div>
+    <p>{{.RegisterForm.PasswordNote}}</p>
+    <div class="form_submit">
+    <!-- <button class="g-recaptcha" 
+        data-sitekey="reCAPTCHA_site_key" 
+        data-callback='onSubmit' 
+        data-action='submit'>{{.RegisterForm.SubmitName}}</button> -->
+    <input type="submit" name={{.RegisterForm.SubmitName}} />
+    </div>
+    </form>
+</div>
+{{end}}
