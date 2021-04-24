@@ -1,0 +1,6 @@
+{{define "register"}}{{template "default" .}}
+Thank you for registering your Account. To enable it and log in please follow the link below.
+{{.ClickLink}}/{{.RegistrationID}}
+
+Tanks for your patients
+{{end}}

@@ -1,0 +1,5 @@
+{{define "default"}}From: {{.FromName}} <{{.From}}>
+Subject: {{.Subject}}
+To: {{.RecipientName}} <{{.Recipient}}>
+
+{{end}}
