@@ -6,9 +6,11 @@ import (
 	"net/url"
 	"time"
 
-	"lutra/db"
-	"lutra/model"
-	"lutra/util"
+	"github.com/Komplementariteten/lutra/model"
+
+	"github.com/Komplementariteten/lutra/util"
+
+	"github.com/Komplementariteten/lutra/db"
 )
 
 // RegisterPageTemplate is the Name of the Template file

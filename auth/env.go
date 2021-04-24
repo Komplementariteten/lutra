@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"lutra"
+	"github.com/Komplementariteten/lutra"
 )
 
 type Env struct {

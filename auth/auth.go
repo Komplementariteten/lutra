@@ -10,10 +10,10 @@ import (
 	"strings"
 	"time"
 
-	"lutra/db"
-	"lutra/model"
-	"lutra/pages"
-	"lutra/util"
+	"github.com/Komplementariteten/lutra/db"
+	"github.com/Komplementariteten/lutra/model"
+	"github.com/Komplementariteten/lutra/pages"
+	"github.com/Komplementariteten/lutra/util"
 
 	"github.com/dgrijalva/jwt-go"
 	"go.mongodb.org/mongo-driver/bson"

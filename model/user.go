@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"lutra/util"
+	"github.com/Komplementariteten/lutra/util"
 
 	"go.mongodb.org/mongo-driver/bson"
 )

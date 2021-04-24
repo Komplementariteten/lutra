@@ -8,10 +8,11 @@ import (
 	"encoding/pem"
 	"fmt"
 	"io/ioutil"
-	"lutra"
 	"os"
 
-	"lutra/util"
+	"github.com/Komplementariteten/lutra"
+
+	"github.com/Komplementariteten/lutra/util"
 )
 
 const privateKeyFile = "./res/key.pem"

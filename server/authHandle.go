@@ -7,10 +7,10 @@ import (
 	"strings"
 	"time"
 
-	"lutra/auth"
-	"lutra/db"
-	"lutra/pages"
-	"lutra/util"
+	"github.com/Komplementariteten/lutra/auth"
+	"github.com/Komplementariteten/lutra/db"
+	"github.com/Komplementariteten/lutra/pages"
+	"github.com/Komplementariteten/lutra/util"
 )
 
 // Testuser PW: abcABC123$

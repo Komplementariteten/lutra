@@ -1,7 +1,7 @@
 package pages
 
 import (
-	"lutra/util"
+	"github.com/Komplementariteten/lutra/util"
 )
 
 // LoginPageTemplate is the Name of the Template file

@@ -6,10 +6,10 @@ import (
 	"strings"
 	"time"
 
-	"lutra/db"
-	"lutra/model"
-	"lutra/pages"
-	"lutra/util"
+	"github.com/Komplementariteten/lutra/db"
+	"github.com/Komplementariteten/lutra/model"
+	"github.com/Komplementariteten/lutra/pages"
+	"github.com/Komplementariteten/lutra/util"
 )
 
 // DoRegister handles the Register Requests

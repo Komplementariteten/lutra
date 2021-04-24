@@ -9,7 +9,3 @@ type LutraConfig struct {
 	MongoDbName          string
 	PrivateKeyPw         string
 }
-
-func Config() string {
-	return "lutra config"
-}

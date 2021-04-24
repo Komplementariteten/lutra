@@ -11,11 +11,11 @@ import (
 	"path"
 	"strings"
 
+	"github.com/Komplementariteten/lutra/auth"
+	"github.com/Komplementariteten/lutra/db"
+	"github.com/Komplementariteten/lutra/util"
 	"github.com/valyala/fastjson"
 	"go.mongodb.org/mongo-driver/bson"
-	"lutra/auth"
-	"lutra/db"
-	"lutra/util"
 )
 
 const HeaderNameContentType = "Content-Type"

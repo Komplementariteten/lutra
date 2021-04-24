@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"lutra/auth"
-	"lutra/db"
-	"lutra/util"
+	"github.com/Komplementariteten/lutra/auth"
+	"github.com/Komplementariteten/lutra/db"
+	"github.com/Komplementariteten/lutra/util"
 )
 
 type portalHandle struct {
