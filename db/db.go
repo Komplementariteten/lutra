@@ -45,8 +45,10 @@ const (
 	DatabaseNotConnected = "Database not Connected"
 )
 
-var errNotConnected = errors.New("Handle not connected to Database")
 var dbIDField = "_id"
+var ErrEntityNotFound = errors.New("document not found")
+var ErrMoreThanOneItemDeleted = errors.New("more than one item deleted")
+var errNotConnected = errors.New("handle not connected to database")
 
 // NewConnection in Context to the Database
 func NewConnection(ctx context.Context, connectionString string, dataBase string) (db *Db, err error) {
@@ -130,8 +132,24 @@ func (db *Db) Collection(ctx context.Context, collectionName string) (p *Pool, e
 	return p, nil
 }
 
+func (p *Pool) Get(ctx context.Context, search *Filter) (*DbEntity, error) {
+	dbEntity := &DbEntity{}
+	bsMap, err := p.getBson(ctx, search.filter)
+	if err == mongo.ErrNilDocument {
+		return nil, ErrEntityNotFound
+	}
+	if err != nil {
+		return nil, err
+	}
+	err = dbEntity.FromMap(bsMap)
+	if err != nil {
+		return nil, err
+	}
+	return dbEntity, nil
+}
+
 // Get returns a Single Result from the search Map
-func (p *Pool) Get(ctx context.Context, searchMap *bson.M) (bson.M, error) {
+func (p *Pool) getBson(ctx context.Context, searchMap *bson.M) (bson.M, error) {
 	if !p.db.IsConnected {
 		return nil, errNotConnected
 	}
@@ -146,15 +164,30 @@ func (p *Pool) Get(ctx context.Context, searchMap *bson.M) (bson.M, error) {
 }
 
 // GetId finds the object id in a bson.M
-func (p *Pool) GetId(m bson.M) primitive.ObjectID {
+func (p *Pool) getID(m bson.M) primitive.ObjectID {
 	if id, ok := m["_id"].(primitive.ObjectID); ok {
 		return id
 	}
 	return primitive.NilObjectID
 }
 
+func (p *Pool) Find(ctx context.Context, filter Filter) ([]*DbEntity, error) {
+	maps, err := p.findBson(ctx, filter.filter)
+	if err == mongo.ErrNilDocument {
+		return nil, ErrEntityNotFound
+	}
+	entities := make([]*DbEntity, len(maps))
+	for i := 0; i < len(maps); i++ {
+		err = entities[i].FromMap(maps[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return entities, nil
+}
+
 // Find searches for all matches in Db
-func (p *Pool) Find(ctx context.Context, filter *bson.M) ([]bson.M, error) {
+func (p *Pool) findBson(ctx context.Context, filter *bson.M) ([]bson.M, error) {
 	if !p.db.IsConnected {
 		return nil, errNotConnected
 	}
@@ -173,64 +206,42 @@ func (p *Pool) Find(ctx context.Context, filter *bson.M) ([]bson.M, error) {
 }
 
 // Delete removes a tracked Item form the Database
-func (p *Pool) Delete(ctx context.Context, id primitive.ObjectID) error {
+func (p *Pool) Delete(ctx context.Context, id EntityId) error {
 	if !p.db.IsConnected {
 		return errNotConnected
 	}
 	if !p.isCreated {
 		return fmt.Errorf("Collection %s does not exist", p.Name)
 	}
-	deleteResult, err := p.c.DeleteOne(ctx, &bson.M{dbIDField: id})
+	mongoId, err := primitive.ObjectIDFromHex(string(id))
+	if err != nil {
+		return err
+	}
+
+	deleteResult, err := p.c.DeleteOne(ctx, &bson.M{dbIDField: mongoId})
 	if err != nil {
 		return err
 	}
 	if deleteResult.DeletedCount != 1 {
-		return fmt.Errorf("More than one Item deleted")
+		return fmt.Errorf("more than one item deleted")
 	}
 	return nil
 }
 
-// DeleteTracked removes a tracked Item form the Database
-func (p *Pool) DeleteTracked(ctx context.Context, item *TrackedItem) error {
-	if !p.db.IsConnected {
-		return errNotConnected
-	}
-	if !p.isCreated {
-		return fmt.Errorf("Collection %s does not exist", p.Name)
-	}
-	deleteResult, err := p.c.DeleteOne(ctx, &bson.M{dbIDField: item.InsertedID})
+func toBsonM(data map[string]interface{}) *bson.M {
+
+}
+
+func (p *Pool) Add(ctx context.Context, entity Entity) (*TrackedItem, error) {
+	tracked, err := p.AddM(ctx, toBsonM(entity.AsMap()))
 	if err != nil {
-		return err
+		return nil, err
 	}
-	if deleteResult.DeletedCount != 1 {
-		return fmt.Errorf("More than one Item deleted")
-	}
-	return nil
+	return tracked, nil
 }
 
 // AddM adds a Entity where the Entity is represented by bson.M to the MongoDb
 func (p *Pool) AddM(ctx context.Context, document *bson.M) (item *TrackedItem, err error) {
-	if !p.db.IsConnected {
-		return nil, errNotConnected
-	}
-
-	if !p.isCreated {
-		return nil, fmt.Errorf("Collection %s does not exist", p.Name)
-	}
-
-	insertResult, err := p.c.InsertOne(ctx, document)
-	if err != nil {
-		log.Printf("Failed to Add %v, err: %v", document, err)
-		return nil, err
-	}
-	item = &TrackedItem{IsFile: false}
-	item.InsertedID = insertResult.InsertedID.(primitive.ObjectID)
-	item.Collection = p.Name
-	return item, nil
-}
-
-// Add adds a Entity to the MongoDb
-func (p *Pool) Add(ctx context.Context, document *bson.D) (item *TrackedItem, err error) {
 	if !p.db.IsConnected {
 		return nil, errNotConnected
 	}
